@@ -17,7 +17,8 @@ if (connectionString == null)
 BlobServiceClient blobServiceClient = new(connectionString);
 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("some-container");
 BlockBlobClient blobClient = containerClient.GetBlockBlobClient("test-file");
-Uri uri = new("https://put-block-from-url-esc-issue-demo-server-3vngqvvpoq-uc.a.run.app");
+// Azure unescapes the %2F in this URL unnecessarily.
+Uri uri = new("https://put-block-from-url-esc-issue-demo-server-3vngqvvpoq-uc.a.run.app/red%2Fblue.txt");
 var response = blobClient.SyncUploadFromUri(uri, true);
 var dl = blobClient.Download();
 Console.WriteLine($"====\n{new StreamReader(dl.Value.Content).ReadToEnd()}\n====\n") ;
